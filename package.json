@@ -1,0 +1,22 @@
+{
+  "name": "mwa-back-end",
+  "version": "1.0.0",
+  "description": "mwa course project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/B-Galbadrakh/mwa-back-end.git"
+  },
+  "author": "Galbadrakh Battur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/B-Galbadrakh/mwa-back-end/issues"
+  },
+  "homepage": "https://github.com/B-Galbadrakh/mwa-back-end#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
