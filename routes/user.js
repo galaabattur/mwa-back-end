@@ -10,6 +10,10 @@ router.post("/", (req, res) => {
   console.log(req.body);
 });
 
+router.post("/checklogin", jwt.middleToken, (req, res) => {
+  res.send({ success: true });
+});
+
 router.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
