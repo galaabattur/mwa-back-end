@@ -2,7 +2,7 @@ const express = require("express");
 const jsonwebtoken = require("jsonwebtoken");
 const secretKey = "secret";
 
-const generateToken = function(data) {
+const generateToken = function (data) {
   return new Promise((resolve, reject) => {
     jsonwebtoken.sign(data, secretKey, (err, token) => {
       if (err) {
@@ -14,7 +14,7 @@ const generateToken = function(data) {
   });
 };
 
-const isValidToken = function(token) {
+const isValidToken = function (token) {
   return new Promise((resolve, reject) => {
     jsonwebtoken.verify(token, secretKey, (err, data) => {
       if (err) {
@@ -26,7 +26,7 @@ const isValidToken = function(token) {
   });
 };
 
-const verifyToken = function(token) {
+const verifyToken = function (token) {
   return new Promise((resolve, reject) => {
     jsonwebtoken.verify(token, secretKey, (err, data) => {
       if (err) {
@@ -38,13 +38,13 @@ const verifyToken = function(token) {
   });
 };
 
-const isToken = function(req, res, next) {
+const isToken = function (req, res, next) {
   let token = req.get("token");
   verifyToken(token)
-    .then(data => {
+    .then((data) => {
       next();
     })
-    .catch(err => {
+    .catch((err) => {
       return res.status(400).send({ error: err.message });
     });
 };
@@ -52,5 +52,5 @@ const isToken = function(req, res, next) {
 module.exports = {
   generate: generateToken,
   isValid: isValidToken,
-  middleToken: isToken
+  middleToken: isToken,
 };

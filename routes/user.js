@@ -1,36 +1,56 @@
 const express = require("express");
 const router = express.Router();
+const { User, validateUser, validateLoginRequest } = require("../models/User");
+const passwordHash = require("password-hash");
 const jwt = require("../util/jwt-auth");
 
-router.get("/", (req, res) => {
-  res.send("GET USER API");
+router.get("/", async (req, res) => {
+  let user = await User.find({ username: req.body.username });
+  res.send(user);
 });
 
-router.post("/", (req, res) => {
-  console.log(req.body);
-});
-
-router.post("/checklogin", jwt.middleToken, (req, res) => {
-  res.send({ success: true });
-});
-
-router.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  if (username == "galaa" && password == "galaa") {
-    user = { id: 1, username: username };
-    jwt
-      .generate(user)
-      .then((token) => {
-        console.log("responding");
-        return res.send({ token: token });
-      })
-      .catch((err) => {
-        res.send({ error: err });
-      });
-  } else {
-    return res.status(400).send({ error: "Invalid request" });
+router.post("/", async (req, res) => {
+  let { error } = validateUser(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
   }
+
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send("User already registered");
+
+  user = new User({
+    username: req.body.username,
+    password: passwordHash.generate(req.body.password),
+    email: req.body.email,
+  });
+  user = await user.save();
+  return res.send(user);
+});
+
+router.post("/login", async (req, res) => {
+  let { error } = validateLoginRequest(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let user = await User.findOne({ username: req.body.username });
+
+  if (
+    !(
+      passwordHash.verify(req.body.password, user.password) &&
+      user.username == req.body.username
+    )
+  ) {
+    // Invalid user
+    return res.status(400).send("Username or password incorrect");
+  }
+
+  jwt
+    .generate(user.username + user.password)
+    .then((token) => {
+      return res.send({ token: token });
+    })
+    .catch((err) => {
+      return res.status(500).send({ error: err });
+    });
 });
 
 module.exports = router;
