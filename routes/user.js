@@ -17,17 +17,20 @@ router.post("/checklogin", jwt.middleToken, (req, res) => {
 router.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  token = "";
-
-  user = { id: 1, username: username, password: password };
-  jwt
-    .generate(user)
-    .then(token => {
-      res.send({ token: token });
-    })
-    .catch(err => {
-      res.send({ error: err });
-    });
+  if (username == "galaa" && password == "galaa") {
+    user = { id: 1, username: username };
+    jwt
+      .generate(user)
+      .then((token) => {
+        console.log("responding");
+        return res.send({ token: token });
+      })
+      .catch((err) => {
+        res.send({ error: err });
+      });
+  } else {
+    return res.status(400).send({ error: "Invalid request" });
+  }
 });
 
 module.exports = router;

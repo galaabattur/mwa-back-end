@@ -45,7 +45,7 @@ const isToken = function(req, res, next) {
       next();
     })
     .catch(err => {
-      return res.send({ error: err.message });
+      return res.status(400).send({ error: err.message });
     });
 };
 
