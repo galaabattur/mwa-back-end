@@ -49,8 +49,13 @@ const isToken = function (req, res, next) {
     });
 };
 
+const getDataFromToken = function (token) {
+  return jsonwebtoken.verify(token, secretKey);
+};
+
 module.exports = {
   generate: generateToken,
   isValid: isValidToken,
   middleToken: isToken,
+  getDataFromToken: getDataFromToken,
 };

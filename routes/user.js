@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
   user = await user.save();
 
   jwt
-    .generate(user.username + "" + user.password)
+    .generate(user._id.toString())
     .then((token) => {
       return res.send({ token: token });
     })
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
   }
 
   jwt
-    .generate(user.username + user.password)
+    .generate(user._id.toString())
     .then((token) => {
       return res.send({ token: token });
     })

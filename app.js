@@ -5,6 +5,7 @@ const app = express();
 const database = require("./config/database");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
+const cors = require("cors");
 const PORT = 3000;
 
 // Utilities
@@ -15,7 +16,9 @@ const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 
 // Implementation of Utilities and middleware
-app.use(crossOrigin);
+// app.use(crossOrigin);
+
+app.use(cors());
 app.use(jsonParser);
 
 // Implementation of routers

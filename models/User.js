@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("../util/jwt-auth");
 const Joi = require("@hapi/joi");
-const { Post } = require("./Post");
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, trim: true },
