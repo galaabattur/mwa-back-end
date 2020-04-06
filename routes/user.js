@@ -9,6 +9,14 @@ router.get("/", async (req, res) => {
   res.send(user);
 });
 
+router.get("/:username", async (req, res) => {
+  let username = req.params.username;
+  let user = await User.findOne({ username: username });
+  if (!user) return res.status(404).send("User not found");
+
+  return res.send(user);
+});
+
 router.post("/", async (req, res) => {
   let { error } = validateUser(req.body);
   if (error) {
@@ -20,6 +28,7 @@ router.post("/", async (req, res) => {
 
   user = new User({
     username: req.body.username,
+
     password: passwordHash.generate(req.body.password),
     email: req.body.email,
   });
