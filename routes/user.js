@@ -24,7 +24,15 @@ router.post("/", async (req, res) => {
     email: req.body.email,
   });
   user = await user.save();
-  return res.send(user);
+
+  jwt
+    .generate(user.username + "" + user.password)
+    .then((token) => {
+      return res.send({ token: token });
+    })
+    .catch((error) => {
+      return res.send({ error: error });
+    });
 });
 
 router.post("/login", async (req, res) => {
@@ -32,6 +40,10 @@ router.post("/login", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ username: req.body.username });
+
+  if (!user) {
+    return res.status(400).send("User not found");
+  }
 
   if (
     !(
@@ -49,7 +61,8 @@ router.post("/login", async (req, res) => {
       return res.send({ token: token });
     })
     .catch((err) => {
-      return res.status(500).send({ error: err });
+      console.log(err);
+      return res.status(500).send(err);
     });
 });
 
