@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
   jwt
     .generate(user._id.toString())
     .then((token) => {
-      return res.send({ token: token });
+      return res.send({ token: token, isAdmin: user.isAdmin });
     })
     .catch((error) => {
       return res.send({ error: error });
@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
   jwt
     .generate(user._id.toString())
     .then((token) => {
-      return res.send({ token: token });
+      return res.send({ token: token, isAdmin: user.isAdmin });
     })
     .catch((err) => {
       console.log(err);
