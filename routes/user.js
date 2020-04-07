@@ -3,10 +3,10 @@ const router = express.Router();
 const { User, validateUser, validateLoginRequest } = require("../models/User");
 const passwordHash = require("password-hash");
 const jwt = require("../util/jwt-auth");
+const _ = require("underscore");
 
 router.get("/", async (req, res) => {
-  let user = await User.find({ username: req.body.username });
-  res.send(user);
+  return res.send("user get request");
 });
 
 router.get("/:username", async (req, res) => {
@@ -33,11 +33,12 @@ router.post("/", async (req, res) => {
     isAdmin: false,
   });
   user = await user.save();
+  const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
 
   jwt
-    .generate(user._id.toString())
+    .generate(JSON.stringify(retUser))
     .then((token) => {
-      return res.send({ token: token, isAdmin: user.isAdmin });
+      return res.send({ token: token });
     })
     .catch((error) => {
       return res.send({ error: error });
@@ -63,11 +64,11 @@ router.post("/login", async (req, res) => {
     // Invalid user
     return res.status(400).send("Username or password incorrect");
   }
-
+  const retUser = _.pick(user, ["_id", "username", "email", "isAdmin"]);
   jwt
-    .generate(user._id.toString())
+    .generate(JSON.stringify(retUser))
     .then((token) => {
-      return res.send({ token: token, isAdmin: user.isAdmin });
+      return res.send({ token: token });
     })
     .catch((err) => {
       console.log(err);
