@@ -5,6 +5,7 @@ const Joi = require("@hapi/joi");
 const adevertisementSchema = new mongoose.Schema({
   imgUrl: { type: String, required: true, trim: true },
   description: { type: String, required: true, trim: true },
+  minAge: { type: Number, required: false, trim: true, default: 0 },
 });
 
 const Advertisement = mongoose.model("Advertisement", adevertisementSchema);
