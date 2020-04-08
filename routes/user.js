@@ -76,4 +76,12 @@ router.post("/login", async (req, res) => {
     });
 });
 
+router.post("/search", async (req, res) => {
+  console.log(req.body);
+  const user = await User.find({ username: req.body.username });
+  if (!user) return res.status(400).send("User Not found");
+
+  return res.send({ users: user });
+});
+
 module.exports = router;
