@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("../util/jwt-auth");
 const { Post } = require("../models/Post");
 const { User } = require("../models/User");
+const _ = require("underscore");
 
 router.use(jwt.middleToken);
 
@@ -21,10 +22,12 @@ router.post("/", async (req, res) => {
   let userid = jwt.getDataFromToken(req.get("token"));
 
   const user = await User.findById(userid);
+
   const post = new Post({
     user: user,
     body: req.body.postname,
     likes: [],
+    insertDate: Date.now(),
   });
   post.save();
 
