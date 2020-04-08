@@ -6,13 +6,23 @@ const { User } = require("../models/User");
 
 router.use(jwt.middleToken);
 
+router.get("/", async (req, res) => {
+  return res.send("get post");
+});
+
+router.get("/:username", async (req, res) => {
+  const user = await User.find({ username: req.params.username });
+  if (!user) return res.status(404).send("No user found");
+  const posts = await Post.find({ "user.username": req.params.username });
+  return res.send(posts);
+});
+
 router.post("/", async (req, res) => {
   let userid = jwt.getDataFromToken(req.get("token"));
 
   const user = await User.findById(userid);
   const post = new Post({
     user: user,
-    title: req.body.postname,
     body: req.body.postname,
     likes: [],
   });
