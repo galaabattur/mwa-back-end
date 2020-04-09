@@ -10,6 +10,7 @@ router.post("/", async (req, res) => {
     imgUrl: req.body.imgUrl,
     description: req.body.description,
     minAge: req.body.minAge,
+    country: req.body.country,
   });
   advertisement = await advertisement.save();
   // return res.status(200).send("Advertisement created successfully");
