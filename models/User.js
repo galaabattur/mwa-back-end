@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, trim: true },
   password: { type: String, required: true, trim: true },
   birthday: { type: Date, required: true, trim: true },
+  country: { type: String, required: true, trim: true },
   isAdmin: Boolean,
 });
 
@@ -27,6 +28,7 @@ function validateUser(request) {
     password: Joi.string().required(),
     email: Joi.string().email().required(),
     birthday: Joi.string().required(),
+    country: Joi.string().required(),
   });
   return userObjectSchema.validate(request);
 }
