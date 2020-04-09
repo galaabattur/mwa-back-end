@@ -5,7 +5,6 @@ const jwt = require("../util/jwt-auth");
 const _ = require("underscore");
 
 router.post("/", async (req, res) => {
-  console.log(req.body);
   let advertisement = new Advertisement({
     imgUrl: req.body.imgUrl,
     description: req.body.description,
