@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   birthday: { type: Date, required: true, trim: true },
   country: { type: String, required: true, trim: true },
   isAdmin: Boolean,
+  followers: Array,
 });
 
 // const userSchema = new mongoose.Schema({
