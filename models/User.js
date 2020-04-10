@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   country: { type: String, required: true, trim: true },
   isAdmin: Boolean,
   followers: Array,
+  photo: String,
 });
 
 // const userSchema = new mongoose.Schema({

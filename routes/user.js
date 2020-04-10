@@ -4,6 +4,26 @@ const { User, validateUser, validateLoginRequest } = require("../models/User");
 const passwordHash = require("password-hash");
 const jwt = require("../util/jwt-auth");
 const _ = require("underscore");
+const multer = require("multer");
+const bodyParser = require("body-parser");
+const path = require("path");
+
+// const DIR = "./uploads/";
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../public/img"));
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+let upload = multer({ storage: storage });
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get("/", async (req, res) => {
   return res.send("user get request");
@@ -33,6 +53,7 @@ router.post("/", async (req, res) => {
     birthday: req.body.birthday,
     country: req.body.country,
     isAdmin: false,
+    photo: "",
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -94,6 +115,20 @@ router.post("/follower/:username", async (req, res) => {
     return res.send({ msg: "success" });
   } else {
     return res.status(404).send({ msg: "error" });
+  }
+});
+
+router.post("/photo/:username", upload.single("file"), async (req, res) => {
+  if (!req.file) {
+    console.log("your request doesn't have any file");
+    return res.send({ success: false });
+  } else {
+    console.log(req.file);
+    const user = await User.updateOne(
+      { username: req.params.username },
+      { photo: req.file.filename }
+    );
+    return res.send({ success: true });
   }
 });
 

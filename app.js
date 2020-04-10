@@ -6,6 +6,7 @@ const database = require("./config/database");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const cors = require("cors");
+const path = require("path");
 const PORT = 3000;
 
 // Utilities
@@ -21,6 +22,7 @@ const advertisementRouter = require("./routes/Advertisement");
 
 app.use(cors());
 app.use(jsonParser);
+app.use(express.static(path.join(__dirname, "public")));
 
 // Implementation of routerss
 app.use("/api/user", userRouter);
