@@ -9,7 +9,9 @@ router.post("/", async (req, res) => {
     unhealthyWord: req.body.unhealthyWord,
   });
   unhealthyWordClass = await unhealthyWordClass.save();
-  return res.status(200).send("Unhealthy Word created successfully");
+  res.setHeader('Content-Type', 'text/plain');
+  res.statusCode = 200;
+  return res.send({msj: "Unhealthy Word created successfully"});
 });
 
 module.exports = router;
