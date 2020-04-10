@@ -15,6 +15,7 @@ const crossOrigin = require("./util/cors");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const advertisementRouter = require("./routes/Advertisement");
+const unhealthyWordRouter = require("./routes/UnhealthyWord")
 
 // Implementation of Utilities and middleware
 // app.use(crossOrigin);
@@ -26,5 +27,6 @@ app.use(jsonParser);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/advertisement", advertisementRouter);
+app.use("/api/unhealthy", unhealthyWordRouter);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
