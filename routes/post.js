@@ -20,6 +20,7 @@ router.get("/:username", async (req, res) => {
 
 router.post("/", async (req, res) => {
   let userid = jwt.getDataFromToken(req.get("token"));
+  console.log(userid);
 
   const user = await User.findById(userid);
 
