@@ -14,4 +14,10 @@ router.post("/", async (req, res) => {
   return res.send({unhealthyWordClass1});
 });
 
+router.get("/", async (req, res) => {
+  const unhealthyWordsList = await UnhealthyWord.find();
+
+  return res.send({unhealthyWordsList});
+});
+
 module.exports = router;
