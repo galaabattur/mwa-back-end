@@ -20,4 +20,13 @@ router.get("/", async (req, res) => {
   return res.send({unhealthyWordsList});
 });
 
+router.post("/delete", async (req, res) => {
+  console.log("get in delete "+JSON.stringify(req.body));
+  await UnhealthyWord.deleteOne({_id: req.body._id});
+
+  res.setHeader('Content-Type', 'text/plain');
+  res.statusCode = 200;
+  return res.send("deleted good");
+});
+
 module.exports = router;
