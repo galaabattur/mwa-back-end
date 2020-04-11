@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
     birthday: req.body.birthday,
     country: req.body.country,
     isAdmin: false,
-    photo: "",
+    photo: "http://localhost:3000/img/avatar.png",
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -96,10 +96,25 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/search", async (req, res) => {
-  const user = await User.find({ username: new RegExp(req.body.username) });
-  if (!user) return res.status(400).send("User Not found");
+  const userid = jwt.getDataFromToken(req.get("token"));
+  const me = await User.findById(userid);
+  var users = await User.find({ username: new RegExp(req.body.username) });
 
-  return res.send({ users: user });
+  var retList = [];
+  if (users.length > 0) {
+    for (let index in users) {
+      var tmp = _.pick(users[index], ["_id", "username", "country", "photo"]);
+
+      if (me.followers.includes(tmp.username)) {
+        tmp.flwdFlg = true;
+      } else {
+        tmp.flwdFlg = false;
+      }
+      retList.push(tmp);
+    }
+  }
+
+  return res.send({ users: retList });
 });
 
 router.post("/follower", async (req, res) => {
@@ -122,7 +137,7 @@ router.post("/photo/:username", upload.single("file"), async (req, res) => {
     console.log(req.file);
     const user = await User.updateOne(
       { username: req.params.username },
-      { photo: req.file.filename }
+      { photo: "http://localhost:3000/img/" + req.file.filename }
     );
     return res.send({ success: true });
   }
@@ -135,13 +150,26 @@ router.get("/follower", async (req, res) => {
 
   let followerObjArr = [];
   for (follower of followersArr) {
-    const f = await User.findOne({ username: follower });
+    const f = await User.findById(follower);
     const ff = _.pick(f, ["_id", "username", "country", "photo"]);
-    ff.photo = "http://localhost:3000/img/" + ff.photo;
     followerObjArr.push(ff);
   }
 
   return res.send({ followers: followerObjArr });
+});
+
+router.post("/unfollow", async (req, res) => {
+  const toUnfollow = req.body.unfollow;
+  const userid = jwt.getDataFromToken(req.get("token"));
+  const user = await User.findByIdAndUpdate(
+    userid,
+    {
+      $pull: { followers: toUnfollow },
+    },
+    { new: true }
+  );
+
+  return res.send(user);
 });
 
 module.exports = router;
