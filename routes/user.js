@@ -84,7 +84,7 @@ router.post("/login", async (req, res) => {
     // Invalid user
     return res.status(400).send("Username or password incorrect");
   }
-  const retUser = _.pick(user, ["_id", "username", "email", "isAdmin"]);
+  const retUser = _.pick(user, ["_id", "username", "email", "isAdmin", "isEnabled"]);
   jwt
     .generate(JSON.stringify(retUser))
     .then((token) => {
