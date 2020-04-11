@@ -22,11 +22,11 @@ router.get("/", async (req, res) => {
 
 router.post("/delete", async (req, res) => {
   console.log("get in delete "+JSON.stringify(req.body));
-  await UnhealthyWord.deleteOne({_id: req.body._id});
+  unhealthyWordClass1 = await UnhealthyWord.deleteOne({_id: req.body._id});
 
   res.setHeader('Content-Type', 'text/plain');
   res.statusCode = 200;
-  return res.send("deleted good");
+  return res.send({unhealthyWordClass1});
 });
 
 module.exports = router;
