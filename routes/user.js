@@ -50,6 +50,7 @@ router.post("/", async (req, res) => {
     country: req.body.country,
     isAdmin: false,
     photo: "http://localhost:3000/img/avatar.png",
+    isEnabled: true,
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);

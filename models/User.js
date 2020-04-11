@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   isAdmin: Boolean,
   followers: Array,
   photo: String,
+  isEnabled: Boolean,
 });
 
 // const userSchema = new mongoose.Schema({
