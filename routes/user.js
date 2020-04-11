@@ -136,7 +136,8 @@ router.get("/follower", async (req, res) => {
   let followerObjArr = [];
   for (follower of followersArr) {
     const f = await User.findOne({ username: follower });
-    const ff = _.pick(f, ["_id", "username", "country"]);
+    const ff = _.pick(f, ["_id", "username", "country", "photo"]);
+    ff.photo = "http://localhost:3000/img/" + ff.photo;
     followerObjArr.push(ff);
   }
 
