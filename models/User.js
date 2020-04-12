@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   followers: Array,
   photo: String,
   isEnabled: Boolean,
+  timesBadPost: Number,
 });
 
 // const userSchema = new mongoose.Schema({
