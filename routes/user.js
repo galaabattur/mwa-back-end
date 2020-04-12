@@ -85,7 +85,13 @@ router.post("/login", async (req, res) => {
     // Invalid user
     return res.status(400).send("Username or password incorrect");
   }
-  const retUser = _.pick(user, ["_id", "username", "email", "isAdmin", "isEnabled"]);
+  const retUser = _.pick(user, [
+    "_id",
+    "username",
+    "email",
+    "isAdmin",
+    "isEnabled",
+  ]);
   jwt
     .generate(JSON.stringify(retUser))
     .then((token) => {
@@ -107,7 +113,7 @@ router.post("/search", async (req, res) => {
     for (let index in users) {
       var tmp = _.pick(users[index], ["_id", "username", "country", "photo"]);
 
-      if (me.followers.includes(tmp.username)) {
+      if (me.followers.includes(tmp._id)) {
         tmp.flwdFlg = true;
       } else {
         tmp.flwdFlg = false;
@@ -171,7 +177,7 @@ router.post("/unfollow", async (req, res) => {
     { new: true }
   );
 
-  return res.send(user);
+  return res.send({ msg: "success" });
 });
 
 router.post("/updateBadPost", async (req, res) => {
