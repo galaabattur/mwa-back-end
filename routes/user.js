@@ -91,6 +91,7 @@ router.post("/login", async (req, res) => {
     "email",
     "isAdmin",
     "isEnabled",
+    "timesBadPost",
   ]);
   jwt
     .generate(JSON.stringify(retUser))
@@ -190,6 +191,28 @@ router.post("/updateBadPost", async (req, res) => {
       $inc: {timesBadPost: 1},
     },
     { upsert: true },
+    function(err, result) {
+      if (err) {
+        console.log("error "+err);
+        return res.send(err);
+      } else {
+        console.log("result "+result);
+        return res.send(result);
+      }
+    }
+  );
+
+});
+
+router.post("/disabledUserPost", async (req, res) => {
+  const userid = jwt.getDataFromToken(req.get("token"));
+  console.log("the id is "+JSON.stringify(userid));
+
+  const user = await User.findByIdAndUpdate(
+    { _id: userid["_id"] },
+    {
+      isEnabled: false,
+    },
     function(err, result) {
       if (err) {
         console.log("error "+err);
