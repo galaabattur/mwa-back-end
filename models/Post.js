@@ -5,7 +5,10 @@ const postSchema = new mongoose.Schema({
   user: User.schema,
   body: String,
   likes: Array,
+  comments: Array,
   insertDate: Date,
+  photo: String,
+  notificationFlg: Boolean,
 });
 
 const Post = mongoose.model("Post", postSchema);

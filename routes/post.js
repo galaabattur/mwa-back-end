@@ -28,6 +28,8 @@ router.post("/", async (req, res) => {
     user: user,
     body: req.body.postname,
     likes: [],
+    comments: [],
+    notificationFlg: false,
     insertDate: Date.now(),
   });
   post.save();
