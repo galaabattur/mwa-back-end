@@ -219,6 +219,7 @@ router.post("/disabledUserPost", async (req, res) => {
         console.log("error "+err);
         return res.send(err);
       } else {
+        //if account is disabled, send an email
         console.log("result "+result);
         sendMail(userid);
         return res.send(result);
@@ -227,7 +228,6 @@ router.post("/disabledUserPost", async (req, res) => {
   );
 
 });
-
 
 sendMail = (userid)=>{
   var transporter = nodemailer.createTransport({
@@ -252,7 +252,12 @@ sendMail = (userid)=>{
       console.log('Email sent: ' + info.response);
     }
   });
-  
 }
+
+router.get("/getInactive", async (req, res) => {
+  const usersInactive = await User.find({ isEnabled: 'false'});
+  if (!usersInactive) return res.status(404).send("No inactive");
+  return res.send({usersInactive: usersInactive});
+});
 
 module.exports = router;
