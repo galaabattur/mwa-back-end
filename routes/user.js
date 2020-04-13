@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
     isAdmin: false,
     photo: "http://localhost:3000/img/avatar.png",
     isEnabled: true,
-    timesBadPost: 0
+    timesBadPost: 0,
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -183,47 +183,45 @@ router.post("/unfollow", async (req, res) => {
 
 router.post("/updateBadPost", async (req, res) => {
   const userid = jwt.getDataFromToken(req.get("token"));
-  console.log("the id is "+JSON.stringify(userid["_id"]));
+  console.log("the id is " + JSON.stringify(userid["_id"]));
 
   const user = await User.findByIdAndUpdate(
     { _id: userid["_id"] },
     {
-      $inc: {timesBadPost: 1},
+      $inc: { timesBadPost: 1 },
     },
     { upsert: true },
-    function(err, result) {
+    function (err, result) {
       if (err) {
-        console.log("error "+err);
+        console.log("error " + err);
         return res.send(err);
       } else {
-        console.log("result "+result);
+        console.log("result " + result);
         return res.send(result);
       }
     }
   );
-
 });
 
 router.post("/disabledUserPost", async (req, res) => {
   const userid = jwt.getDataFromToken(req.get("token"));
-  console.log("the id is "+JSON.stringify(userid));
+  console.log("the id is " + JSON.stringify(userid));
 
   const user = await User.findByIdAndUpdate(
     { _id: userid["_id"] },
     {
       isEnabled: false,
     },
-    function(err, result) {
+    function (err, result) {
       if (err) {
-        console.log("error "+err);
+        console.log("error " + err);
         return res.send(err);
       } else {
-        console.log("result "+result);
+        console.log("result " + result);
         return res.send(result);
       }
     }
   );
-
 });
 
 module.exports = router;
