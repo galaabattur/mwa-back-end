@@ -7,6 +7,7 @@ const _ = require("underscore");
 const multer = require("multer");
 const bodyParser = require("body-parser");
 const path = require("path");
+const nodemailer = require('nodemailer');
 
 // const DIR = "./uploads/";
 
@@ -219,11 +220,39 @@ router.post("/disabledUserPost", async (req, res) => {
         return res.send(err);
       } else {
         console.log("result "+result);
+        sendMail(userid);
         return res.send(result);
       }
     }
   );
 
 });
+
+
+sendMail = (userid)=>{
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'mwaproject2020@gmail.com',
+      pass: 'Password01@'
+    }
+  });
+  
+  var mailOptions = {
+    from: 'mwaproject2020@gmail.com',
+    to: JSON.stringify(userid["email"]),
+    subject: 'Account disabled',
+    text: 'You have post more than 20 unhealthy post. Your account has been disabled forever!!!!'
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
+}
 
 module.exports = router;
