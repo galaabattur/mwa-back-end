@@ -7,7 +7,7 @@ const _ = require("underscore");
 const multer = require("multer");
 const bodyParser = require("body-parser");
 const path = require("path");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 // const DIR = "./uploads/";
 
@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
     isAdmin: false,
     photo: "http://localhost:3000/img/avatar.png",
     isEnabled: true,
-    timesBadPost: 0
+    timesBadPost: 0,
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -184,75 +184,73 @@ router.post("/unfollow", async (req, res) => {
 
 router.post("/updateBadPost", async (req, res) => {
   const userid = jwt.getDataFromToken(req.get("token"));
-  console.log("the id is "+JSON.stringify(userid["_id"]));
+  console.log("the id is " + JSON.stringify(userid["_id"]));
 
   const user = await User.findByIdAndUpdate(
     { _id: userid["_id"] },
     {
-      $inc: {timesBadPost: 1},
+      $inc: { timesBadPost: 1 },
     },
     { upsert: true },
-    function(err, result) {
+    function (err, result) {
       if (err) {
-        console.log("error "+err);
+        console.log("error " + err);
         return res.send(err);
       } else {
-        console.log("result "+result);
+        console.log("result " + result);
         return res.send(result);
       }
     }
   );
-
 });
 
 router.post("/disabledUserPost", async (req, res) => {
   const userid = jwt.getDataFromToken(req.get("token"));
-  console.log("the id is "+JSON.stringify(userid));
+  console.log("the id is " + JSON.stringify(userid));
 
   const user = await User.findByIdAndUpdate(
     { _id: userid["_id"] },
     {
       isEnabled: false,
     },
-    function(err, result) {
+    function (err, result) {
       if (err) {
-        console.log("error "+err);
+        console.log("error " + err);
         return res.send(err);
       } else {
-        //if account is disabled, send an email
-        console.log("result "+result);
+        console.log("result " + result);
         sendMail(userid);
         return res.send(result);
       }
     }
   );
-
 });
 
-sendMail = (userid)=>{
+sendMail = (userid) => {
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'mwaproject2020@gmail.com',
-      pass: 'Password01@'
-    }
+      user: "mwaproject2020@gmail.com",
+      pass: "Password01@",
+    },
   });
-  
+
   var mailOptions = {
-    from: 'mwaproject2020@gmail.com',
+    from: "mwaproject2020@gmail.com",
     to: JSON.stringify(userid["email"]),
-    subject: 'Account disabled',
-    text: 'You have post more than 20 unhealthy post. Your account has been disabled forever!!!!'
+    subject: "Account disabled",
+    text:
+      "You have post more than 20 unhealthy post. Your account has been disabled forever!!!!",
   };
-  
-  transporter.sendMail(mailOptions, function(error, info){
+
+  transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log("Email sent: " + info.response);
     }
   });
-}
+};
 
 router.get("/getInactive", async (req, res) => {
   const usersInactive = await User.find({ isEnabled: 'false'});
