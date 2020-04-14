@@ -281,4 +281,25 @@ router.post("/activeUser", async (req, res) => {
   );
 });
 
+router.post("/requestActiveUser", async (req, res) => {
+  const userid = jwt.getDataFromToken(req.get("token"));
+  console.log("the id is " + JSON.stringify(userid));
+
+  const user = await User.findByIdAndUpdate(
+    { _id: userid["_id"]},
+    {
+      activateRequest: true
+    },
+    function (err, result) {
+      if (err) {
+        console.log("error " + err);
+        return res.send(err);
+      } else {
+        console.log("result " + result);
+        return res.send(result);
+      }
+    }
+  );
+});
+
 module.exports = router;
