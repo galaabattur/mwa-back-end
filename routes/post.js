@@ -33,8 +33,20 @@ router.get("/:username", async (req, res) => {
   const user = await User.findById(userid);
   if (!user) return res.status(404).send("No user found");
 
-  const posts = await Post.find({ user: userid }).populate("user");
+  // Getting own posts
+  let posts = await Post.find({ user: userid }).populate("user");
 
+  // Getting follower posts
+  const followers = user.followers;
+  for (let follower in followers) {
+    const followerPosts = await Post.find({
+      user: followers[follower],
+    }).populate("user");
+
+    for (let post in followerPosts) {
+      posts.push(followerPosts[post]);
+    }
+  }
   return res.send(posts);
 });
 
@@ -42,7 +54,6 @@ router.post("/", upload.single("myFile"), async (req, res) => {
   let userid = jwt.getDataFromToken(req.get("token"));
   const user = await User.findById(userid);
   let filename = "";
-  console.log("req.file", req.file);
   if (req.file != undefined) {
     filename = "http://localhost:3000/img/posts/" + req.file.filename;
   }
@@ -64,6 +75,23 @@ router.post("/", upload.single("myFile"), async (req, res) => {
 router.post("/testphoto", upload.single("myFile"), (req, res) => {
   console.log(req.body.postname);
   return res.send({ msg: "success" });
+});
+
+router.post("/comment", async (req, res) => {
+  const userid = jwt.getDataFromToken(req.get("token"));
+  const commentData = req.body.comment;
+  const postId = req.body.postId;
+
+  const user = await User.findById(userid);
+
+  const post = await Post.findByIdAndUpdate(
+    postId,
+    {
+      $push: { comments: { commentText: commentData, commentedBy: user._id } },
+    },
+    { new: true }
+  );
+  return res.send({ newpost: post });
 });
 
 module.exports = router;
