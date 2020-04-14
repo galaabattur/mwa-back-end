@@ -70,7 +70,6 @@ router.post("/", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   let { error } = validateLoginRequest(req.body);
-  console.log(error);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ username: req.body.username });
