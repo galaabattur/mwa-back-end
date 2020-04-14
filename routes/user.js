@@ -53,6 +53,7 @@ router.post("/", async (req, res) => {
     photo: "http://localhost:3000/img/avatar.png",
     isEnabled: true,
     timesBadPost: 0,
+    activateRequest: false
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -93,6 +94,7 @@ router.post("/login", async (req, res) => {
     "isAdmin",
     "isEnabled",
     "timesBadPost",
+    "activateRequest"
   ]);
   jwt
     .generate(JSON.stringify(retUser))

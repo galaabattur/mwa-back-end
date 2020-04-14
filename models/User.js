@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   photo: String,
   isEnabled: Boolean,
   timesBadPost: Number,
+  activateRequest: Boolean,
 });
 
 // const userSchema = new mongoose.Schema({
