@@ -258,4 +258,25 @@ router.get("/getInactive", async (req, res) => {
   return res.send({usersInactive: usersInactive});
 });
 
+router.post("/activeUser", async (req, res) => {
+  const userid = req.body.user;
+  console.log("the id is " + JSON.stringify(userid));
+
+  const user = await User.findByIdAndUpdate(
+    { _id: userid},
+    {
+      isEnabled: true, timesBadPost: 0
+    },
+    function (err, result) {
+      if (err) {
+        console.log("error " + err);
+        return res.send(err);
+      } else {
+        console.log("result " + result);
+        return res.send(result);
+      }
+    }
+  );
+});
+
 module.exports = router;
