@@ -255,7 +255,7 @@ sendMail = (userid) => {
 };
 
 router.get("/getInactive", async (req, res) => {
-  const usersInactive = await User.find({ isEnabled: 'false'});
+  const usersInactive = await User.find({ isEnabled: 'false', activateRequest: 'true'});
   if (!usersInactive) return res.status(404).send("No inactive");
   return res.send({usersInactive: usersInactive});
 });
@@ -267,7 +267,7 @@ router.post("/activeUser", async (req, res) => {
   const user = await User.findByIdAndUpdate(
     { _id: userid},
     {
-      isEnabled: true, timesBadPost: 0
+      isEnabled: true, timesBadPost: 0, activateRequest: false
     },
     function (err, result) {
       if (err) {
