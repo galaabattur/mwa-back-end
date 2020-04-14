@@ -53,6 +53,7 @@ router.post("/", async (req, res) => {
     photo: "http://localhost:3000/img/avatar.png",
     isEnabled: true,
     timesBadPost: 0,
+    activateRequest: false
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -93,6 +94,7 @@ router.post("/login", async (req, res) => {
     "isAdmin",
     "isEnabled",
     "timesBadPost",
+    "activateRequest"
   ]);
   jwt
     .generate(JSON.stringify(retUser))
@@ -253,7 +255,7 @@ sendMail = (userid) => {
 };
 
 router.get("/getInactive", async (req, res) => {
-  const usersInactive = await User.find({ isEnabled: 'false'});
+  const usersInactive = await User.find({ isEnabled: 'false', activateRequest: 'true'});
   if (!usersInactive) return res.status(404).send("No inactive");
   return res.send({usersInactive: usersInactive});
 });
@@ -265,7 +267,28 @@ router.post("/activeUser", async (req, res) => {
   const user = await User.findByIdAndUpdate(
     { _id: userid},
     {
-      isEnabled: true, timesBadPost: 0
+      isEnabled: true, timesBadPost: 0, activateRequest: false
+    },
+    function (err, result) {
+      if (err) {
+        console.log("error " + err);
+        return res.send(err);
+      } else {
+        console.log("result " + result);
+        return res.send(result);
+      }
+    }
+  );
+});
+
+router.post("/requestActiveUser", async (req, res) => {
+  const userid = jwt.getDataFromToken(req.get("token"));
+  console.log("the id is " + JSON.stringify(userid));
+
+  const user = await User.findByIdAndUpdate(
+    { _id: userid["_id"]},
+    {
+      activateRequest: true
     },
     function (err, result) {
       if (err) {
