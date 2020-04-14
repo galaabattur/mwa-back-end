@@ -53,7 +53,13 @@ router.get("/:username", async (req, res) => {
       posts.push(followerPosts[post]);
     }
   }
-
+  posts.sort((a, b) => {
+    if (a.insertDate > b.insertDate) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
   return res.send(posts);
 });
 
