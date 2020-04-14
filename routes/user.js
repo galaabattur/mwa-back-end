@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
     photo: "http://localhost:3000/img/avatar.png",
     isEnabled: true,
     timesBadPost: 0,
-    activateRequest: false
+    activateRequest: false,
   });
   user = await user.save();
   const retUser = _.pick(user, ["_id", "username", "isAdmin", "email"]);
@@ -70,6 +70,7 @@ router.post("/", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   let { error } = validateLoginRequest(req.body);
+  console.log(error);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ username: req.body.username });
@@ -94,7 +95,7 @@ router.post("/login", async (req, res) => {
     "isAdmin",
     "isEnabled",
     "timesBadPost",
-    "activateRequest"
+    "activateRequest",
   ]);
   jwt
     .generate(JSON.stringify(retUser))
@@ -255,9 +256,12 @@ sendMail = (userid) => {
 };
 
 router.get("/getInactive", async (req, res) => {
-  const usersInactive = await User.find({ isEnabled: 'false', activateRequest: 'true'});
+  const usersInactive = await User.find({
+    isEnabled: "false",
+    activateRequest: "true",
+  });
   if (!usersInactive) return res.status(404).send("No inactive");
-  return res.send({usersInactive: usersInactive});
+  return res.send({ usersInactive: usersInactive });
 });
 
 router.post("/activeUser", async (req, res) => {
@@ -265,9 +269,11 @@ router.post("/activeUser", async (req, res) => {
   console.log("the id is " + JSON.stringify(userid));
 
   const user = await User.findByIdAndUpdate(
-    { _id: userid},
+    { _id: userid },
     {
-      isEnabled: true, timesBadPost: 0, activateRequest: false
+      isEnabled: true,
+      timesBadPost: 0,
+      activateRequest: false,
     },
     function (err, result) {
       if (err) {
@@ -286,9 +292,9 @@ router.post("/requestActiveUser", async (req, res) => {
   console.log("the id is " + JSON.stringify(userid));
 
   const user = await User.findByIdAndUpdate(
-    { _id: userid["_id"]},
+    { _id: userid["_id"] },
     {
-      activateRequest: true
+      activateRequest: true,
     },
     function (err, result) {
       if (err) {

@@ -34,6 +34,7 @@ function validateUser(request) {
     email: Joi.string().email().required(),
     birthday: Joi.string().required(),
     country: Joi.string().required(),
+    isAdmin: Joi.required(),
   });
   return userObjectSchema.validate(request);
 }
