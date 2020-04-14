@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
-const { User } = require("./User");
 
 const postSchema = new mongoose.Schema({
-  user: User.schema,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   body: String,
-  likes: Array,
-  comments: Array,
+  likes: [{ likedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" } }],
+  comments: [
+    {
+      commentText: String,
+      commentedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    },
+  ],
   insertDate: Date,
   photo: String,
   notificationFlg: Boolean,

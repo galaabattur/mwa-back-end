@@ -28,9 +28,13 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:username", async (req, res) => {
-  const user = await User.find({ username: req.params.username });
+  const userid = jwt.getDataFromToken(req.get("token"))["_id"];
+
+  const user = await User.findById(userid);
   if (!user) return res.status(404).send("No user found");
-  const posts = await Post.find({ "user.username": req.params.username });
+
+  const posts = await Post.find({ user: userid }).populate("user");
+
   return res.send(posts);
 });
 
@@ -44,7 +48,7 @@ router.post("/", upload.single("myFile"), async (req, res) => {
   }
 
   const post = new Post({
-    user: user,
+    user: user._id,
     body: req.body.postname,
     likes: [],
     comments: [],

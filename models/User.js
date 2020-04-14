@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   birthday: { type: Date, required: true, trim: true },
   country: { type: String, required: true, trim: true },
   isAdmin: Boolean,
-  followers: Array,
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   photo: String,
   isEnabled: Boolean,
   timesBadPost: Number,
