@@ -34,19 +34,26 @@ router.get("/:username", async (req, res) => {
   if (!user) return res.status(404).send("No user found");
 
   // Getting own posts
-  let posts = await Post.find({ user: userid }).populate("user");
+  let posts = await Post.find({ user: userid })
+    .sort({ insertDate: -1 })
+    .populate("user")
+    .populate("comments.commentedBy");
 
   // Getting follower posts
   const followers = user.followers;
   for (let follower in followers) {
     const followerPosts = await Post.find({
       user: followers[follower],
-    }).populate("user");
+    })
+      .populate("user")
+      .populate("comments.commentedBy")
+      .sort({ insertDate: -1 });
 
     for (let post in followerPosts) {
       posts.push(followerPosts[post]);
     }
   }
+
   return res.send(posts);
 });
 
@@ -90,7 +97,9 @@ router.post("/comment", async (req, res) => {
       $push: { comments: { commentText: commentData, commentedBy: user._id } },
     },
     { new: true }
-  );
+  )
+    .populate("user")
+    .populate("comments.commentedBy");
   return res.send({ newpost: post });
 });
 
