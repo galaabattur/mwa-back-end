@@ -7,6 +7,7 @@ const adevertisementSchema = new mongoose.Schema({
   description: { type: String, required: true, trim: true },
   minAge: { type: Number, required: false, trim: true, default: 0 },
   country: { type: String, required: true, trim: true },
+  linkUrl: { type: String, required: true, trim: true },
 });
 
 const Advertisement = mongoose.model("Advertisement", adevertisementSchema);

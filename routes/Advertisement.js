@@ -11,6 +11,7 @@ router.post("/", async (req, res) => {
     description: req.body.description,
     minAge: req.body.minAge,
     country: req.body.country,
+    linkUrl: req.body.linkUrl,
   });
   advertisement = await advertisement.save();
   return res.send({ msg: "ad saved successfully" });
