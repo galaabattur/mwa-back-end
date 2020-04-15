@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
     email: req.body.email,
     birthday: req.body.birthday,
     country: req.body.country,
-    isAdmin: false,
+    isAdmin: req.body.isAdmin,
     photo: "http://localhost:3000/img/avatar.png",
     isEnabled: true,
     timesBadPost: 0,

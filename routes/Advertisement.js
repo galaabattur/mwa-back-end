@@ -12,8 +12,13 @@ router.post("/", async (req, res) => {
     country: req.body.country,
   });
   advertisement = await advertisement.save();
-  // return res.status(200).send("Advertisement created successfully");
   return res.send({ msg: "ad saved successfully" });
+});
+
+router.get("/", async (req, res) => {
+  const advertisement = await Advertisement.find();
+
+  return res.send({ advertisement: advertisement });
 });
 
 module.exports = router;
