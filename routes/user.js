@@ -188,12 +188,11 @@ router.post("/unfollow", async (req, res) => {
 
 router.post("/updateBadPost", async (req, res) => {
   const userid = jwt.getDataFromToken(req.get("token"));
-  console.log("the id is " + JSON.stringify(userid["_id"]));
 
   const user = await User.findByIdAndUpdate(
     { _id: userid["_id"] },
     {
-      $inc: { timesBadPost: 1 },
+      $inc: { timesBadPost: 0.5 },
     },
     { upsert: true },
     function (err, result) {
