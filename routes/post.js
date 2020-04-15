@@ -60,7 +60,18 @@ router.get("/:username", async (req, res) => {
       return 1;
     }
   });
-  return res.send(posts);
+  let newPosts = JSON.parse(JSON.stringify(posts));
+
+  newPosts.forEach((p) => {
+    p.liked = false;
+    p.likes.forEach((like) => {
+      if (like.likedBy.toString() == user._id.toString()) {
+        p.liked = true;
+      }
+    });
+  });
+
+  return res.send(newPosts);
 });
 
 router.post("/", upload.single("myFile"), async (req, res) => {
@@ -107,6 +118,36 @@ router.post("/comment", async (req, res) => {
     .populate("user")
     .populate("comments.commentedBy");
   return res.send({ newpost: post });
+});
+
+router.post("/like", async (req, res) => {
+  const userid = jwt.getDataFromToken(req.get("token"));
+  const likedPost = req.body.postId;
+
+  const user = await User.findById(userid);
+  const post = await Post.findByIdAndUpdate(
+    likedPost,
+    {
+      $push: { likes: { likedBy: user._id } },
+    },
+    { new: true }
+  );
+  return res.send(post);
+});
+
+router.post("/unlike", async (req, res) => {
+  const userid = jwt.getDataFromToken(req.get("token"));
+  const likedPost = req.body.postId;
+
+  const user = await User.findById(userid);
+  const post = await Post.findByIdAndUpdate(
+    likedPost,
+    {
+      $pull: { likes: { likedBy: user._id } },
+    },
+    { new: true }
+  );
+  return res.send(post);
 });
 
 module.exports = router;
