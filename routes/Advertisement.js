@@ -3,6 +3,7 @@ const router = express.Router();
 const { Advertisement } = require("../models/Advertisement");
 const jwt = require("../util/jwt-auth");
 const _ = require("underscore");
+const url = require('url');
 
 router.post("/", async (req, res) => {
   let advertisement = new Advertisement({
@@ -15,9 +16,10 @@ router.post("/", async (req, res) => {
   return res.send({ msg: "ad saved successfully" });
 });
 
-router.get("/", async (req, res) => {
-  const advertisement = await Advertisement.find();
-
+router.get("/:data/:data", async (req, res) => {
+  let a1 = req.url.split("/", 3);
+  const advertisement = await Advertisement.find({$and: [{$or: [{country:a1[1]}, {country: "all"}]}, {minAge: {$gte: Number(a1[2])}}]});
+  
   return res.send({ advertisement: advertisement });
 });
 

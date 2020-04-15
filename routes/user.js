@@ -95,6 +95,8 @@ router.post("/login", async (req, res) => {
     "isEnabled",
     "timesBadPost",
     "activateRequest",
+    "birthday",
+    "country",
   ]);
   jwt
     .generate(JSON.stringify(retUser))
