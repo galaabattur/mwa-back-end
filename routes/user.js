@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
     birthday: req.body.birthday,
     country: req.body.country,
     isAdmin: req.body.isAdmin,
-    photo: "http://localhost:3000/img/avatar.png",
+    photo: "https://mwa-project-2020-b.herokuapp.com/img/avatar.png",
     isEnabled: true,
     timesBadPost: 0,
     activateRequest: false,
@@ -151,7 +151,10 @@ router.post("/photo/:username", upload.single("file"), async (req, res) => {
     console.log(req.file);
     const user = await User.updateOne(
       { username: req.params.username },
-      { photo: "http://localhost:3000/img/" + req.file.filename }
+      {
+        photo:
+          "https://mwa-project-2020-b.herokuapp.com/img/" + req.file.filename,
+      }
     );
     return res.send({ success: true });
   }

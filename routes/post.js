@@ -79,7 +79,8 @@ router.post("/", upload.single("myFile"), async (req, res) => {
   const user = await User.findById(userid);
   let filename = "";
   if (req.file != undefined) {
-    filename = "http://localhost:3000/img/posts/" + req.file.filename;
+    filename =
+      "https://mwa-project-2020-b.herokuapp.com/img/posts/" + req.file.filename;
   }
 
   const post = new Post({
