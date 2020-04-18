@@ -4,7 +4,7 @@ var mongodb_connection_string =
   "heroku_6k9gks3m";
 
 mongoose
-  .connect(this.mongodb_connection_string, {
+  .connect(mongodb_connection_string, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
