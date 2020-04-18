@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const cors = require("cors");
 const path = require("path");
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Utilities
 const crossOrigin = require("./util/cors");
@@ -16,7 +16,7 @@ const crossOrigin = require("./util/cors");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const advertisementRouter = require("./routes/Advertisement");
-const unhealthyWordRouter = require("./routes/UnhealthyWord")
+const unhealthyWordRouter = require("./routes/UnhealthyWord");
 
 // Implementation of Utilities and middleware
 // app.use(crossOrigin);
