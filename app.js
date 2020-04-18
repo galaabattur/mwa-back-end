@@ -23,8 +23,7 @@ const unhealthyWordRouter = require("./routes/UnhealthyWord");
 
 app.use(cors());
 app.use(jsonParser);
-// app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Implementation of routerss
 app.use("/api/user", userRouter);
