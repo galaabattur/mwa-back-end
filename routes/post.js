@@ -150,4 +150,40 @@ router.post("/unlike", async (req, res) => {
   return res.send(post);
 });
 
+router.post("/search", async (req, res) => {
+  let posts = [];
+  let words = req.body.searchpost;
+  const userid = jwt.getDataFromToken(req.get("token"));
+
+  const user = await User.findOne({ _id: userid["_id"] }).populate("followers");
+  const followers = JSON.parse(JSON.stringify(user.followers));
+
+  for (let follower of followers) {
+    let userpost = await Post.find({
+      user: follower._id,
+      body: { $regex: words },
+    })
+      .populate("user")
+      .populate("comments.commentedBy")
+      .sort({ insertDate: -1 });
+    // console.log(userpost);
+    for (let p of userpost) {
+      posts.push(p);
+    }
+  }
+
+  let ownpost = await Post.find({
+    user: user._id,
+    body: { $regex: words },
+  })
+    .populate("user")
+    .populate("comments.commentedBy")
+    .sort({ insertDate: -1 });
+
+  for (p of ownpost) {
+    posts.push(p);
+  }
+  return res.send(posts);
+});
+
 module.exports = router;
