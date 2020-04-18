@@ -159,7 +159,9 @@ router.post("/photo/:username", upload.single("file"), async (req, res) => {
 
 router.get("/follower", async (req, res) => {
   let userid = jwt.getDataFromToken(req.get("token"));
-  const user = await User.findById(userid);
+  console.log(userid);
+  const user = await User.findById(userid._id);
+  console.log("user", user);
   let followersArr = user.followers;
 
   let followerObjArr = [];
