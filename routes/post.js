@@ -78,9 +78,11 @@ router.post("/", upload.single("myFile"), async (req, res) => {
   let userid = jwt.getDataFromToken(req.get("token"));
   const user = await User.findById(userid);
   let filename = "";
+  console.log("FILE:", req.file);
   if (req.file != undefined) {
     filename =
       "https://mwa-project-2020-b.herokuapp.com/img/posts/" + req.file.filename;
+    console.log("upload with file");
   }
 
   const post = new Post({
