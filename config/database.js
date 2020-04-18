@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var mongodb_connection_string =
   (process.env.MONGODB_URI || "mongodb://localhost:27017/wishlist-app") +
-  "heroku_6k9gks3m";
+  "/heroku_6k9gks3m";
 console.log(mongodb_connection_string);
 
 mongoose
