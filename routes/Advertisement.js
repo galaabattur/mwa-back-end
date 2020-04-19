@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   return res.send({ msg: "ad saved successfully" });
 });
 
-router.get("/:data/:data", async (req, res) => {
+router.get("/", async (req, res) => {
   // let a1 = req.url.split("/", 3);
   const c = req.query.country;
   const a = req.query.age;
