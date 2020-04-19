@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
       { minAge: { $gte: Number(a) } },
     ],
   });
-  const advertisement = await Advertisement.find();
+  // const advertisement = await Advertisement.find();
 
   return res.send({ advertisement: advertisement });
 });
