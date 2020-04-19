@@ -18,8 +18,15 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:data/:data", async (req, res) => {
-  let a1 = req.url.split("/", 3);
-  // const advertisement = await Advertisement.find({$and: [{$or: [{country:a1[1]}, {country: "all"}]}, {minAge: {$gte: Number(a1[2])}}]});
+  // let a1 = req.url.split("/", 3);
+  const c = req.query.country;
+  const a = req.query.age;
+  const advertisement = await Advertisement.find({
+    $and: [
+      { $or: [{ country: c }, { country: "all" }] },
+      { minAge: { $gte: Number(a) } },
+    ],
+  });
   const advertisement = await Advertisement.find();
 
   return res.send({ advertisement: advertisement });
