@@ -10,7 +10,7 @@ const path = require("path");
 const PORT = process.env.PORT || 3000;
 
 // Utilities
-const crossOrigin = require("./util/cors");
+// const crossOrigin = require("./util/cors");
 
 // Routers
 const userRouter = require("./routes/user");
