@@ -17,17 +17,10 @@ router.post("/", async (req, res) => {
   return res.send({ msg: "ad saved successfully" });
 });
 
-router.get("/:data1/:data2", async (req, res) => {
+router.get("/:data/:data", async (req, res) => {
   let a1 = req.url.split("/", 3);
-  console.log(req.params.data1);
-  console.log(req.params.data2);
-  const advertisement = await Advertisement.find({
-    $and: [
-      { $or: [{ country: req.params.data1 }, { country: "all" }] },
-      { minAge: { $gte: Number(req.params.data1) } },
-    ],
-  });
-  // const advertisement = await Advertisement.find();
+  // const advertisement = await Advertisement.find({$and: [{$or: [{country:a1[1]}, {country: "all"}]}, {minAge: {$gte: Number(a1[2])}}]});
+  const advertisement = await Advertisement.find();
 
   return res.send({ advertisement: advertisement });
 });
