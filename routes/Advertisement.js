@@ -20,15 +20,14 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   // let a1 = req.url.split("/", 3);
   const c = req.query.country;
-  const a = req.query.age;
+  const a = parseInt(req.query.years);
   const advertisement = await Advertisement.find({
     $and: [
       { $or: [{ country: c }, { country: "all" }] },
-      { minAge: { $gte: Number(a) } },
+      { minAge: { $lte: a } },
     ],
   });
   // const advertisement = await Advertisement.find();
-
   return res.send({ advertisement: advertisement });
 });
 
